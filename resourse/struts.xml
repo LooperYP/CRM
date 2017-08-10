@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+	<constant name="struts.configuration.xml.reload" value="true"></constant>
+	<constant name="struts.ui.theme" value="simple"></constant>
+	<constant name="struts.multipart.maxSize" value="2097152"></constant>
+	
+    <package name="default" namespace="/" extends="struts-default">
+    	<interceptors>
+    		<interceptor name="loginInterceptor" class="cn.itcast.web.interceptor.LoginInterceptor"/>
+    		
+    		<interceptor-stack name="myStack">
+    			<interceptor-ref name="loginInterceptor">
+    				<param name="excludeMethods">login</param>
+    			</interceptor-ref>
+    				
+    			<interceptor-ref name="defaultStack"/>
+    		</interceptor-stack>
+    	</interceptors>
+    	
+    	<default-interceptor-ref name="myStack"/>
+    	
+    	<global-results>
+			<result name="login">/login.jsp</result>
+		</global-results>
+    
+		<action name="user_*" class="userAction" method="{1}">
+			<result name="success" type="redirect">/index.jsp</result>
+		</action>
+		
+		<action name="baseDict_*" class="baseDictAction" method="{1}">
+		</action>
+		
+		<action name="customer_*" class="customerAction" method="{1}">
+			<result name="listAction" type="redirectAction">customer_findCustomerList</result>
+			<result name="showAdd">/jsp/customer/add.jsp</result>
+			<result name="showEdit">/jsp/customer/edit.jsp</result>
+			<result name="editInput">/jsp/customer/edit.jsp</result>
+			<result name="listjsp">/jsp/customer/list.jsp</result>
+			<result name="input">/jsp/customer/add.jsp</result>
+			
+			<interceptor-ref name="myStack">
+				<param name="fileUpload.allowedExtensions">.log,.txt,.itheima</param>
+				<param name="fileUpload.maximumSize">1024*1</param>
+			</interceptor-ref>
+		</action>
+		
+		<action name="linkman_*" class="linkManAction" method="{1}">
+			<result name="listAction" type="redirectAction">linkman_findLinkManList</result>
+			<result name="showAdd">/jsp/linkman/add.jsp</result>
+			<result name="listjsp">/jsp/linkman/list.jsp</result>
+			<result name="showEdit">/jsp/linkman/edit.jsp</result>
+		</action>
+		
+		<action name="saleVisit_*" class="saleVisitAction" method="{1}">
+			<result name="listAction" type="redirectAction">saleVisit_findSaleVisitList</result>
+			<result name="showAdd">/jsp/salevisit/add.jsp</result>
+			<result name="listjsp">/jsp/salevisit/list.jsp</result>
+		</action>
+    </package>
+</struts>
